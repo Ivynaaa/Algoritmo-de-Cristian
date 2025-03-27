@@ -1,0 +1,48 @@
+#version: '3.8'
+
+services:
+  ntp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "8000:8000"
+    networks:
+      - ntp-network
+
+  client-1:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    environment:
+      - CLIENT_ID=Client-1
+    depends_on:
+      - ntp-server
+    networks:
+      - ntp-network
+
+  client-2:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    environment:
+      - CLIENT_ID=Client-2
+    depends_on:
+      - ntp-server
+    networks:
+      - ntp-network
+
+  client-3:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    environment:
+      - CLIENT_ID=Client-3
+    depends_on:
+      - ntp-server
+    networks:
+      - ntp-network
+
+networks:
+  ntp-network:
+    driver: bridge
